@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>User list</title>
+<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.ajax({
+			url : "http://localhost:8080/users"
+		}).then(function(data) {
+			$.each(data,function (i, rowData) {
+		        var row = $('<tr></tr>');
+		        $(rowData).each(function (j, cellData) {
+		            row.append($('<td>'+cellData.name+'</td>'));
+		            var button = document.createElement("button");
+	 				button.innerHTML = "View";
+	 				button.setAttribute("id", cellData.userId);
+	 				button.className="btn-primary";
+		            row.append(button)
+		        });
+		        $('.table').append(row);
+		    });
+
+		});
+		
+		$(document).on('click','.btn-primary',function(){
+			var id = this.id;
+			$.ajax({
+				url : "http://localhost:8080/user/"+id
+			}).then(function(data) {
+				var st = data.dob;
+				var dt = new Date(st);
+				alert("Name : "+data.name+"\nAddress : "+data.address+"\nDate of Birth : "+dt);
+			});
+		});
+
+	});
+</script>
+</head>
+<body>
+<div class="container">
+<h1>Users</h1>
+<br><br><br>
+	<div>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody class="tbody">
+			</tbody>			
+		</table>
+	</div>
+</div>
+</body>
+</html>
